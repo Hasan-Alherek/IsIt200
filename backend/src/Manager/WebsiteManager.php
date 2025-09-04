@@ -41,5 +41,17 @@ class WebsiteManager
         $this->entityManager->flush();
         return $website;
     }
-
+    public function editWebsite(
+        int $id,
+        string $name,
+        string $url
+    ): Website
+    {
+        $website = $this->websiteRepository->find($id);
+        $website->setName($name);
+        $website->setUrl($url);
+        $this->entityManager->persist($website);
+        $this->entityManager->flush();
+        return $website;
+    }
 }
