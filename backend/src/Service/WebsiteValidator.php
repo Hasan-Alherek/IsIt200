@@ -6,7 +6,7 @@ use App\Entity\Website;
 
 class WebsiteValidator
 {
-    private $websiteLength = 40;
+    private int $websiteLengthMax = 40;
     public function validateUrl(string $url)
     {
         if(empty($url)) return false;
@@ -15,6 +15,6 @@ class WebsiteValidator
     public function validateName(string $name)
     {
         if(empty($name)) return false;
-        return is_string($name) && (count($name) < $this->websiteLength);
+        return is_string($name) && (strlen($name) < $this->websiteLengthMax);
     }
 }
