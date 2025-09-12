@@ -29,6 +29,19 @@ class WebsiteManager
         return $data;
     }
 
+    public function getWebsite($id): Array
+    {
+        $website = $this->websiteRepository->find($id);
+        $data=[];
+            $name = $website->getName();
+            $url = $website->getUrl();
+            $data[] = [
+                'name' => $name,
+                'url' => $url,
+            ];
+        return $data;
+    }
+
     public function addWebsite(
         string $name,
         string $url
