@@ -42,6 +42,33 @@ final class WebsiteController extends AbstractController
         );
     }
 
+    #[Route('/website/{id}', name: 'app_website', methods: ['GET'])]
+    public function show(
+        int $id,
+    ): JsonResponse
+    {
+        $data = $this->websiteManager->getWebsite($id);
+        if(empty($data)) {
+            return new JsonResponse(
+                [
+                    'status' => 'success',
+                    'message' => 'No website available',
+                    'code' => JsonResponse::HTTP_NO_CONTENT
+                ],
+                JsonResponse::HTTP_NO_CONTENT
+            );
+        }
+        return new JsonResponse(
+            [
+                'status' => 'success',
+                'message' => 'Website is fetched',
+                'code' => JsonResponse::HTTP_OK,
+                'data' => $data
+            ],
+            JsonResponse::HTTP_OK
+        );
+    }
+
     #[Route('/website/add', name: 'website_add', methods: ['POST'])]
     public function add(
         Request $request,
