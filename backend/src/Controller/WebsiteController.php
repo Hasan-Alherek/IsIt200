@@ -17,7 +17,7 @@ final class WebsiteController extends AbstractController
         $this->websiteManager = $websiteManager;
     }
 
-    #[Route('/', name: 'app_website', methods: ['GET'])]
+    #[Route('/', name: 'app_websites', methods: ['GET'])]
     public function index(): JsonResponse
     {
         $data = $this->websiteManager->getAllWebsites();
@@ -42,7 +42,7 @@ final class WebsiteController extends AbstractController
         );
     }
 
-    #[Route('/website/{id}', name: 'app_website', methods: ['GET'])]
+    #[Route('/website/{id}', name: 'website_show', methods: ['GET'])]
     public function show(
         int $id,
     ): JsonResponse
