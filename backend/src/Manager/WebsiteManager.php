@@ -21,9 +21,11 @@ class WebsiteManager
         foreach ($websites as $website) {
             $name = $website->getName();
             $url = $website->getUrl();
+            $id = $website->getId();
             $data[] = [
                 'name' => $name,
                 'url' => $url,
+                'id' => $id
             ];
         }
         return $data;
