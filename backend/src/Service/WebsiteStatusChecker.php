@@ -19,7 +19,7 @@ class WebsiteStatusChecker
         $responseTimeStart = microtime(true);
         $response = $this->httpClient->request(
             'GET',
-            $website->getUrl(),
+            $website['url'],
             [
                 'timeout' => 5
             ]
@@ -28,7 +28,7 @@ class WebsiteStatusChecker
         $responseTime = ($responseTimeEnd - $responseTimeStart) * 1000;
         $statusCode = $response->getStatusCode() ?? 0;
         $checkedAt = new \DateTimeImmutable();
-        $websiteId= $website->getWebsiteId();
+        $websiteId= $website['id'];
 
          return $this->websiteStatusLogManager->add(
             $websiteId,
