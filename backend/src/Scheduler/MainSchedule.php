@@ -2,7 +2,6 @@
 
 namespace App\Scheduler;
 
-use App\Service\WebsiteStatusChecker;
 use Symfony\Component\Console\Messenger\RunCommandMessage;
 use Symfony\Component\Scheduler\Attribute\AsSchedule;
 use Symfony\Component\Scheduler\RecurringMessage;
@@ -15,8 +14,7 @@ final class MainSchedule implements ScheduleProviderInterface
 {
     public function __construct(
         private CacheInterface $cache,
-    ) {
-    }
+    ) {}
 
     public function getSchedule(): Schedule
     {
@@ -27,7 +25,12 @@ final class MainSchedule implements ScheduleProviderInterface
                     new RunCommandMessage("app:check-website-status")
                 )
             )
-            ->stateful($this->cache)
+            ->add(
+                RecurringMessage::cron(
+                    "0 0 * * *",
+                    new RunCommandMessage("app:delete-website-status")
+                )
+            )
         ;
     }
 }

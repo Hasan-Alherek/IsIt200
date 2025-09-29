@@ -15,7 +15,14 @@ class WebsiteStatusLogRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, WebsiteStatusLog::class);
     }
+    public function deleteAll(): int
+    {
+        $qb = $this->createQueryBuilder('w')
+            ->delete()
+            ->getQuery();
 
+        return $qb->execute();
+    }
     //    /**
     //     * @return WebsiteStatusLog[] Returns an array of WebsiteStatusLog objects
     //     */

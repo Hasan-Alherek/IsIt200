@@ -37,7 +37,7 @@ class CheckWebsiteStatusCommand extends Command
             $websites = $this->websiteManager->getAllWebsites();
             foreach ($websites as $website)
             {
-                $this->websiteStatusChecker->check($website);
+                if(!$this->websiteStatusChecker->check($website)) continue;
             }
         }
         catch (\Exception $e)
