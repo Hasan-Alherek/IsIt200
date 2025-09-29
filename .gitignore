@@ -4,10 +4,12 @@
 /backend/.env.local.php
 /backend/.env.*.local
 /backend/config/secrets/prod/prod.decrypt.private.php
+/backend/public/.htaccess
 /backend/public/bundles/
 /backend/var/
 /backend/vendor/
 /backend/.idea/
 /.idea/
+
 ###< symfony/framework-bundle ###
 
