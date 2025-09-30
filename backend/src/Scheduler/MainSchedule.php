@@ -27,7 +27,7 @@ final class MainSchedule implements ScheduleProviderInterface
             )
             ->add(
                 RecurringMessage::cron(
-                    "0 0 * * *",
+                    "0 * * * *",
                     new RunCommandMessage("app:delete-website-status")
                 )
             )
