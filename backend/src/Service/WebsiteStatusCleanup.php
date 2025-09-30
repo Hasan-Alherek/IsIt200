@@ -6,6 +6,7 @@ use App\Manager\WebsiteStatusLogManager;
 
 class WebsiteStatusCleanup
 {
+    private string $deleteTime = "-1 day";
     public function __construct
     (
         private WebsiteStatusLogManager $websiteStatusLogManager,
@@ -14,6 +15,7 @@ class WebsiteStatusCleanup
 
     public function cleanup(): int
     {
-        return $this->websiteStatusLogManager->deleteAllLogs();
+        $deleteDate = new \DateTimeImmutable($this->deleteTime);
+        return $this->websiteStatusLogManager->deleteAllLogs($deleteDate);
     }
 }

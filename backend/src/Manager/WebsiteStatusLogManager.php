@@ -35,9 +35,9 @@ class WebsiteStatusLogManager
         $this->entityManager->flush();
         return $websiteStatusLog;
     }
-    public function deleteAllLogs(): int
+    public function deleteAllLogs($deleteDate = "-1 day"): int
     {
         $websiteStatusLogRepository = $this->entityManager->getRepository(WebsiteStatusLog::class);
-        return $websiteStatusLogRepository->deleteAll();
+        return $websiteStatusLogRepository->deleteAll($deleteDate);
     }
 }
