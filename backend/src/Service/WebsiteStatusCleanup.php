@@ -16,6 +16,6 @@ class WebsiteStatusCleanup
     public function cleanup(): int
     {
         $deleteDate = new \DateTimeImmutable($this->deleteTime);
-        return $this->websiteStatusLogManager->deleteAllLogs($deleteDate);
+        return $this->websiteStatusLogManager->cleanupBefore($deleteDate);
     }
 }
