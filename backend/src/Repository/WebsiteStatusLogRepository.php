@@ -15,7 +15,7 @@ class WebsiteStatusLogRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, WebsiteStatusLog::class);
     }
-    public function deleteAll($deleteDate): int
+    public function deleteAllOlderThan($deleteDate): int
     {
         $qb = $this->createQueryBuilder('s')
             ->delete()
