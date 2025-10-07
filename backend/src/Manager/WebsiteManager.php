@@ -71,4 +71,22 @@ class WebsiteManager
         $this->entityManager->flush();
         return $website;
     }
+
+    public function deleteWebsite(
+        int $id,
+    ): bool
+    {
+        $website = $this->websiteRepository->find($id);
+        if (!$website) {
+            return false;
+        }
+        try {
+            $this->entityManager->remove($website);
+            $this->entityManager->flush();
+        }
+        catch (\Exception $e) {
+            return false;
+        }
+        return true;
+    }
 }
