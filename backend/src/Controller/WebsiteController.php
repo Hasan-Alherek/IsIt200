@@ -137,4 +137,30 @@ final class WebsiteController extends AbstractController
             JsonResponse::HTTP_OK
         );
     }
+
+    #[Route('/website/{id}', name: 'website_delete', methods: ['DELETE'])]
+    public function delete(
+        int $id,
+    ): JsonResponse
+    {
+        if(!$this->websiteManager->deleteWebsite($id))
+        {
+            return new JsonResponse(
+                [
+                    'status' => 'error',
+                    'message' => "Website with the id: $id not found",
+                    'code' => JsonResponse::HTTP_NOT_FOUND
+                ],
+                JsonResponse::HTTP_NOT_FOUND
+            );
+        }
+        return new JsonResponse(
+            [
+                'status' => 'success',
+                'message' => "Website with the id: $id deleted",
+                'code' => JsonResponse::HTTP_OK
+            ],
+            JsonResponse::HTTP_OK
+        );
+    }
 }
