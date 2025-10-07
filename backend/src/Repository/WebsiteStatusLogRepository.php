@@ -15,7 +15,26 @@ class WebsiteStatusLogRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, WebsiteStatusLog::class);
     }
+    public function deleteAllOlderThan($deleteDate): int
+    {
+        $qb = $this->createQueryBuilder('s')
+            ->delete()
+            ->where('s.checkedAt < :deleteDate')
+            ->setParameter(':deleteDate', $deleteDate)
+            ->getQuery();
 
+        return $qb->execute();
+    }
+    public function getStatusLogs($websiteId): array
+    {
+        $qb = $this->createQueryBuilder('s')
+            ->where('s.websiteId = :websiteId')
+            ->setParameter(':websiteId', $websiteId)
+            ->orderBy('s.checkedAt', 'DESC')
+            ->getQuery();
+
+        return $qb->getArrayResult();
+    }
     //    /**
     //     * @return WebsiteStatusLog[] Returns an array of WebsiteStatusLog objects
     //     */

@@ -8,36 +8,40 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class WebsiteManager
 {
-    public function __construct(WebsiteRepository $websiteRepository, EntityManagerInterface $entityManager )
-    {
-        $this->websiteRepository = $websiteRepository;
-        $this->entityManager = $entityManager;
-    }
+    public function __construct
+    (
+        Private WebsiteRepository $websiteRepository,
+        Private EntityManagerInterface $entityManager
+    ) {}
 
-    public function getAllWebsites(): Array
+    public function getAllWebsites(): array
     {
         $websites = $this->websiteRepository->findAll();
         $data=[];
         foreach ($websites as $website) {
             $name = $website->getName();
             $url = $website->getUrl();
+            $id = $website->getId();
             $data[] = [
                 'name' => $name,
                 'url' => $url,
+                'id' => $id
             ];
         }
         return $data;
     }
 
-    public function getWebsite($id): Array
+    public function getWebsite($id): array
     {
         $website = $this->websiteRepository->find($id);
         $data=[];
             $name = $website->getName();
             $url = $website->getUrl();
+            $id = $website->getId();
             $data[] = [
                 'name' => $name,
                 'url' => $url,
+                'id' => $id,
             ];
         return $data;
     }
