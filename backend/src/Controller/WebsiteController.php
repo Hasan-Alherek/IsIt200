@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Manager\WebsiteManager;
+use App\Manager\WebsiteStatusLogManager;
 use App\Service\WebsiteValidator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,10 +13,11 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class WebsiteController extends AbstractController
 {
-    public function __construct(WebsiteManager $websiteManager)
-    {
-        $this->websiteManager = $websiteManager;
-    }
+    public function __construct(
+        private WebsiteManager $websiteManager,
+        private WebsiteStatusLogManager $websiteStatusLogManager,
+    )
+    {}
 
     #[Route('/', name: 'app_websites', methods: ['GET'])]
     public function index(): JsonResponse
@@ -48,6 +50,7 @@ final class WebsiteController extends AbstractController
     ): JsonResponse
     {
         $data = $this->websiteManager->getWebsite($id);
+        $data[0]['statusLogs'] = $this->websiteStatusLogManager->getStatusLogs($id) ?? "";
         if(empty($data)) {
             return new JsonResponse(
                 [

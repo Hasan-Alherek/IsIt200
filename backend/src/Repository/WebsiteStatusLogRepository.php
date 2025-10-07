@@ -25,6 +25,16 @@ class WebsiteStatusLogRepository extends ServiceEntityRepository
 
         return $qb->execute();
     }
+    public function getStatusLogs($websiteId): array
+    {
+        $qb = $this->createQueryBuilder('s')
+            ->where('s.websiteId = :websiteId')
+            ->setParameter(':websiteId', $websiteId)
+            ->orderBy('s.checkedAt', 'DESC')
+            ->getQuery();
+
+        return $qb->getArrayResult();
+    }
     //    /**
     //     * @return WebsiteStatusLog[] Returns an array of WebsiteStatusLog objects
     //     */

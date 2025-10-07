@@ -53,4 +53,9 @@ class WebsiteStatusLogManager
         $websiteStatusLogRepository = $this->entityManager->getRepository(WebsiteStatusLog::class);
         return $websiteStatusLogRepository->deleteAllOlderThan($deleteDate);
     }
+    public function getStatusLogs($websiteId)
+    {
+        $websiteStatusLogRepository = $this->entityManager->getRepository(WebsiteStatusLog::class);
+        return $websiteStatusLogRepository->getStatusLogs($websiteId);
+    }
 }
