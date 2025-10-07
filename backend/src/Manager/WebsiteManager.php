@@ -34,7 +34,6 @@ class WebsiteManager
     public function getWebsite($id): array
     {
         $website = $this->websiteRepository->find($id);
-        $websiteStatusLogs = $website->getWebsiteStatusLogs()->toArray();
         $data=[];
             $name = $website->getName();
             $url = $website->getUrl();
@@ -43,7 +42,6 @@ class WebsiteManager
                 'name' => $name,
                 'url' => $url,
                 'id' => $id,
-                'statLogs' => $websiteStatusLogs,
             ];
         return $data;
     }
