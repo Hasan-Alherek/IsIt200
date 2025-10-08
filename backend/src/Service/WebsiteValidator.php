@@ -2,19 +2,17 @@
 
 namespace App\Service;
 
-use App\Entity\Website;
+use App\Exception\BadRequestException;
 
 class WebsiteValidator
 {
     private int $websiteLengthMax = 40;
-    public function validateUrl(string $url)
+    public function validateUrl(string $url): void
     {
-        if(empty($url)) return false;
-        return (bool) filter_var($url, FILTER_VALIDATE_URL);
+        if(empty($url) || (!filter_var($url, FILTER_VALIDATE_URL))) throw new BadRequestException;
     }
-    public function validateName(string $name)
+    public function validateName(string $name): void
     {
-        if(empty($name)) return false;
-        return is_string($name) && (strlen($name) < $this->websiteLengthMax);
+        if(empty($name) || !is_string($name) || (strlen($name) > $this->websiteLengthMax)) throw new BadRequestException;
     }
 }
