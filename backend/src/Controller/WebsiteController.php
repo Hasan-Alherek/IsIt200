@@ -23,16 +23,6 @@ final class WebsiteController extends AbstractController
     public function index(): JsonResponse
     {
         $data = $this->websiteManager->getAllWebsites();
-        if(empty($data)) {
-            return new JsonResponse(
-                [
-                    'status' => 'success',
-                    'message' => 'No websites available',
-                    'code' => JsonResponse::HTTP_NO_CONTENT
-                ],
-                JsonResponse::HTTP_NO_CONTENT
-            );
-        }
         return new JsonResponse(
             [
                 'status' => 'success',
@@ -51,16 +41,6 @@ final class WebsiteController extends AbstractController
     {
         $data = $this->websiteManager->getWebsite($id);
         $data[0]['statusLogs'] = $this->websiteStatusLogManager->getStatusLogs($id) ?? "";
-        if(empty($data)) {
-            return new JsonResponse(
-                [
-                    'status' => 'success',
-                    'message' => 'No website available',
-                    'code' => JsonResponse::HTTP_NO_CONTENT
-                ],
-                JsonResponse::HTTP_NO_CONTENT
-            );
-        }
         return new JsonResponse(
             [
                 'status' => 'success',
@@ -80,20 +60,8 @@ final class WebsiteController extends AbstractController
     {
         $name = $request->query->get('name');
         $url = $request->query->get('url');
-        if(
-            !$websiteValidator->validateName($name) ||
-            !$websiteValidator->validateUrl($url)
-        )
-        {
-            return new JsonResponse(
-                [
-                    'status' => 'error',
-                    'message' => 'Invalid name or url',
-                    'code' => JsonResponse::HTTP_BAD_REQUEST,
-                ],
-                JsonResponse::HTTP_BAD_REQUEST
-            );
-        }
+        $websiteValidator->validateName($name);
+        $websiteValidator->validateUrl($url);
         $this->websiteManager->addWebsite($name, $url);
         return new JsonResponse(
             [
@@ -113,20 +81,8 @@ final class WebsiteController extends AbstractController
     {
         $name = $request->query->get('name');
         $url = $request->query->get('url');
-        if(
-            !$websiteValidator->validateName($name) ||
-            !$websiteValidator->validateUrl($url)
-        )
-        {
-            return new JsonResponse(
-                [
-                    'status' => 'error',
-                    'message' => 'Invalid name or url',
-                    'code' => JsonResponse::HTTP_BAD_REQUEST,
-                ],
-                JsonResponse::HTTP_BAD_REQUEST
-            );
-        }
+        $websiteValidator->validateName($name);
+        $websiteValidator->validateUrl($url);
         $this->websiteManager->editWebsite($id, $name, $url);
         return new JsonResponse(
             [
@@ -143,17 +99,7 @@ final class WebsiteController extends AbstractController
         int $id,
     ): JsonResponse
     {
-        if(!$this->websiteManager->deleteWebsite($id))
-        {
-            return new JsonResponse(
-                [
-                    'status' => 'error',
-                    'message' => "Website with the id: $id not found",
-                    'code' => JsonResponse::HTTP_NOT_FOUND
-                ],
-                JsonResponse::HTTP_NOT_FOUND
-            );
-        }
+        $this->websiteManager->deleteWebsite($id);
         return new JsonResponse(
             [
                 'status' => 'success',

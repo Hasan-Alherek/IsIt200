@@ -3,6 +3,7 @@
 namespace App\Manager;
 
 use App\Entity\Website;
+use App\Exception\NoContentException;
 use App\Repository\WebsiteRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -17,6 +18,7 @@ class WebsiteManager
     public function getAllWebsites(): array
     {
         $websites = $this->websiteRepository->findAll();
+        if(!$websites) return ['No websites found'];
         $data=[];
         foreach ($websites as $website) {
             $name = $website->getName();
@@ -31,9 +33,12 @@ class WebsiteManager
         return $data;
     }
 
-    public function getWebsite($id): array
+    public function getWebsite(
+        int $id
+    ): array
     {
         $website = $this->websiteRepository->find($id);
+        if(!$website) throw new NoContentException;
         $data=[];
             $name = $website->getName();
             $url = $website->getUrl();
@@ -49,44 +54,35 @@ class WebsiteManager
     public function addWebsite(
         string $name,
         string $url
-    ): Website
+    ): void
     {
         $website = new Website();
         $website->setName($name);
         $website->setUrl($url);
         $this->entityManager->persist($website);
         $this->entityManager->flush();
-        return $website;
     }
     public function editWebsite(
         int $id,
         string $name,
         string $url
-    ): Website
+    ): void
     {
         $website = $this->websiteRepository->find($id);
+        if(!$website) throw new NoContentException;
         $website->setName($name);
         $website->setUrl($url);
         $this->entityManager->persist($website);
         $this->entityManager->flush();
-        return $website;
     }
 
     public function deleteWebsite(
         int $id,
-    ): bool
+    ): void
     {
         $website = $this->websiteRepository->find($id);
-        if (!$website) {
-            return false;
-        }
-        try {
-            $this->entityManager->remove($website);
-            $this->entityManager->flush();
-        }
-        catch (\Exception $e) {
-            return false;
-        }
-        return true;
+        if(!$website) throw new NoContentException;
+        $this->entityManager->remove($website);
+        $this->entityManager->flush();
     }
 }
