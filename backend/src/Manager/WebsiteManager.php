@@ -12,7 +12,8 @@ class WebsiteManager
     public function __construct
     (
         Private WebsiteRepository $websiteRepository,
-        Private EntityManagerInterface $entityManager
+        Private EntityManagerInterface $entityManager,
+        private WebsiteStatusLogManager $websiteStatusLogManager
     ) {}
 
     public function getAllWebsites(): array
@@ -24,10 +25,12 @@ class WebsiteManager
             $name = $website->getName();
             $url = $website->getUrl();
             $id = $website->getId();
+            $lastStatusLog = $this->websiteStatusLogManager->getLastStatusLog($id) ?? "No status log";
             $data[] = [
+                'id' => $id,
                 'name' => $name,
                 'url' => $url,
-                'id' => $id
+                'lastStatusLog' => $lastStatusLog['statusCode']
             ];
         }
         return $data;
@@ -43,10 +46,12 @@ class WebsiteManager
             $name = $website->getName();
             $url = $website->getUrl();
             $id = $website->getId();
-            $data[] = [
+            $statusLogs = $this->websiteStatusLogManager->getStatusLogs($id) ?? "";
+        $data[] = [
                 'name' => $name,
                 'url' => $url,
                 'id' => $id,
+                'statusLogs' => $statusLogs
             ];
         return $data;
     }

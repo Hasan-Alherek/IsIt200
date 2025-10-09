@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Manager\WebsiteManager;
-use App\Manager\WebsiteStatusLogManager;
 use App\Service\WebsiteValidator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,7 +14,6 @@ final class WebsiteController extends AbstractController
 {
     public function __construct(
         private WebsiteManager $websiteManager,
-        private WebsiteStatusLogManager $websiteStatusLogManager,
     )
     {}
 
@@ -40,7 +38,6 @@ final class WebsiteController extends AbstractController
     ): JsonResponse
     {
         $data = $this->websiteManager->getWebsite($id);
-        $data[0]['statusLogs'] = $this->websiteStatusLogManager->getStatusLogs($id) ?? "";
         return new JsonResponse(
             [
                 'status' => 'success',

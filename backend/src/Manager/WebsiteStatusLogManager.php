@@ -4,6 +4,7 @@ namespace App\Manager;
 
 use App\Entity\WebsiteStatusLog;
 use App\Repository\WebsiteRepository;
+use App\Repository\WebsiteStatusLogRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Log\LoggerInterface;
@@ -14,6 +15,7 @@ class WebsiteStatusLogManager
     public function __construct
     (
         private WebsiteRepository      $websiteRepository,
+        private WebsiteStatusLogRepository $websiteStatusLogRepository,
         private EntityManagerInterface $entityManager,
         private LoggerInterface        $logger
     )
@@ -57,5 +59,16 @@ class WebsiteStatusLogManager
     {
         $websiteStatusLogRepository = $this->entityManager->getRepository(WebsiteStatusLog::class);
         return $websiteStatusLogRepository->getStatusLogs($websiteId);
+    }
+
+    public function getLastStatusLog($websiteId): ?array
+    {
+        $lastStatus = $this->websiteStatusLogRepository->findOneBy(
+            ['websiteId' => $websiteId],
+            ['checkedAt' => 'DESC']
+        );
+        return $lastStatus ? [
+            'statusCode' => $lastStatus->getStatusCode(),
+        ] : null;
     }
 }
