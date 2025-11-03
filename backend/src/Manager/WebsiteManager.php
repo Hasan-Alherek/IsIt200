@@ -25,7 +25,7 @@ class WebsiteManager
             $name = $website->getName();
             $url = $website->getUrl();
             $id = $website->getId();
-            $lastStatusLog = $this->websiteStatusLogManager->getLastStatusLog($id) ?? "No status log";
+            $lastStatusLog = $this->websiteStatusLogManager->getLastStatusLog($id) ?? ['statusCode' => 'No status log found'];
             $data[] = [
                 'id' => $id,
                 'name' => $name,
