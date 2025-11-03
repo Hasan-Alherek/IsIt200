@@ -55,8 +55,9 @@ final class WebsiteController extends AbstractController
         WebsiteValidator $websiteValidator,
     ): JsonResponse
     {
-        $name = $request->query->get('name');
-        $url = $request->query->get('url');
+        $data = json_decode($request->getContent(), true);
+        $name = $data['name'] ?? null;
+        $url = $data['url'] ?? null;
         $websiteValidator->validateName($name);
         $websiteValidator->validateUrl($url);
         $this->websiteManager->addWebsite($name, $url);
@@ -76,8 +77,9 @@ final class WebsiteController extends AbstractController
         int $id,
     ): JsonResponse
     {
-        $name = $request->query->get('name');
-        $url = $request->query->get('url');
+        $data = json_decode($request->getContent(), true);
+        $name = $data['name'] ?? null;
+        $url = $data['url'] ?? null;
         $websiteValidator->validateName($name);
         $websiteValidator->validateUrl($url);
         $this->websiteManager->editWebsite($id, $name, $url);
