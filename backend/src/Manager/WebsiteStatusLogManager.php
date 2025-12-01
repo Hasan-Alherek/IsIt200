@@ -2,6 +2,7 @@
 
 namespace App\Manager;
 
+use App\Entity\Website;
 use App\Entity\WebsiteStatusLog;
 use App\Repository\WebsiteRepository;
 use App\Repository\WebsiteStatusLogRepository;
@@ -28,7 +29,7 @@ class WebsiteStatusLogManager
     {
         foreach ($websites as $websiteData) {
             $websiteStatusLog = new WebsiteStatusLog();
-            $website = $this->websiteRepository->find($websiteData['id']);
+            $website = $this->entityManager->getReference(Website::class, $websiteData['id']);
             if (!$website) {
                 $this->logger->warning('Website not found', ['id' => $websiteData['id']]);
                 continue;
