@@ -149,7 +149,7 @@ Example Supervisor config (/etc/supervisor/conf.d/isit200.conf):
 
 ```
 [program:isit200-worker]
-command=/usr/bin/php /var/www/IsIt200/bin/console messenger:consume
+command=/usr/bin/php /var/www/IsIt200/backend/bin/console messenger:consume
 directory=/var/www/IsIt200
 autostart=true
 autorestart=true
