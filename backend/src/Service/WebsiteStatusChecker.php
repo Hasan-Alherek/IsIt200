@@ -6,6 +6,7 @@ use App\Entity\WebsiteStatusLog;
 use App\Manager\WebsiteManager;
 use App\Manager\WebsiteStatusLogManager;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 
 class WebsiteStatusChecker
 {
@@ -20,32 +21,41 @@ class WebsiteStatusChecker
     {
         $websites = $this->websiteManager->getAllWebsites();
         foreach ($websites as &$website) {
-            $website = $this->request($website);
+            $website["requestTimeStart"] = microtime(true);
+            $website["response"] = $this->startRequest($website["url"]);
         }
+
+        foreach ($websites as &$website) {
+            $requestTimeStart = $website["requestTimeStart"];
+            $response = $website["response"];
+            try {
+                $statusCode = $response->getStatusCode();
+            } catch (\Throwable $e) {
+                $statusCode = 0;
+            }
+            $requestTimeEnd = microtime(true);
+            $checkedAt = new \DateTimeImmutable();
+            $responseTime = ($requestTimeEnd - $requestTimeStart) * 1000;
+            $website += [
+                "statusCode" => $statusCode,
+                "responseTime" => $responseTime,
+                "checkedAt" => $checkedAt
+            ];
+            unset($website['response'], $website['responseTimeStart']);
+        }
+
          return $this->websiteStatusLogManager->add(
             $websites,
         );
     }
-    private function request($website): array
+    private function startRequest($url): ResponseInterface
     {
-        $responseTimeStart = microtime(true);
-        $response = $this->httpClient->request(
+        return $this->httpClient->request(
             'GET',
-            $website['url'],
+            $url,
             [
                 'timeout' => 5
             ]
         );
-        $responseTimeEnd = microtime(true);
-        $responseTime = ($responseTimeEnd - $responseTimeStart) * 1000;
-        $statusCode = $response->getStatusCode() ?? 0;
-        $checkedAt = new \DateTimeImmutable();
-        $website += [
-            "statusCode" => $statusCode,
-            "responseTime" => $responseTime,
-            "checkedAt" => $checkedAt
-        ];
-        return $website;
     }
-
 }

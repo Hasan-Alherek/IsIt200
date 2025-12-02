@@ -4,7 +4,6 @@ namespace App\Manager;
 
 use App\Entity\Website;
 use App\Entity\WebsiteStatusLog;
-use App\Repository\WebsiteRepository;
 use App\Repository\WebsiteStatusLogRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -15,7 +14,6 @@ class WebsiteStatusLogManager
 
     public function __construct
     (
-        private WebsiteRepository      $websiteRepository,
         private WebsiteStatusLogRepository $websiteStatusLogRepository,
         private EntityManagerInterface $entityManager,
         private LoggerInterface        $logger
@@ -25,7 +23,7 @@ class WebsiteStatusLogManager
 
     public function add(
         $websites
-    )
+    ): bool
     {
         foreach ($websites as $websiteData) {
             $websiteStatusLog = new WebsiteStatusLog();
